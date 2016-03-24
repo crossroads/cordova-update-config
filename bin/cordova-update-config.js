@@ -57,7 +57,7 @@ if (args.version)
   return;
 }
 
-var projectRoot = cordova.findProjectRoot();
+var projectRoot = require('../lib/util').cordovaProjectRoot();
 if (!projectRoot) {
   throw new CordovaError('Current working directory is not a Cordova-based project.');
 }
