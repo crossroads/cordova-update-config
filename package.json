@@ -1,6 +1,6 @@
 {
   "name": "cordova-update-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A command line tool to update cordova's config.xml, useful in continuous integration build environments.",
   "bin": {
     "cordova-update-config": "bin/cordova-update-config.js"
@@ -19,7 +19,6 @@
   "homepage": "https://github.com/crossroads/cordova-update-config#readme",
   "dependencies": {
     "command-line-args": "^2.1.6",
-    "cordova-common": "^1.1.0",
-    "cordova-lib": "^6.0.0"
+    "cordova-common": "^1.1.0"
   }
 }

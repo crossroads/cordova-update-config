@@ -45,7 +45,6 @@ if (args.help || Object.keys(args).length == 0) {
 	return;
 }
 
-var cordova         = require('cordova-lib').cordova;
 var ConfigParser    = require('cordova-common').ConfigParser;
 var CordovaError    = require('cordova-common').CordovaError;
 var fs              = require('fs');
@@ -54,9 +53,7 @@ var path            = require('path');
 if (args.version)
 {
   var pkg = require('../package.json');
-  var cdvVer = require('cordova-lib/package').version;
   console.log('cordova-update-config ' + pkg.version);
-  console.log('cordova ' + cdvVer);
   return;
 }
 
