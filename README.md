@@ -1,13 +1,23 @@
 # cordova-update-config
 
-  A command line tool to update cordova's config.xml, useful in continuous integration build environments.
+[![npm version](https://badge.fury.io/js/cordova-update-config.svg)](https://badge.fury.io/js/cordova-update-config)
 
-Synopsis
+  A node command line tool to update cordova's config.xml, useful in continuous integration build environments.
 
-  cordova-update-config --appname org.company.app --appversion 5.3.223 ...<br/>
+### Install
+
+```
+  npm i -g cordova-update-config
+```
+
+### Synopsis
+
+```
+  cordova-update-config --appname org.company.app --appversion 5.3.223 ...
   cordova-update-config --help
+```
 
-Options
+### Options
 
 | Alias | Argument            | Description                                  |
 | ---   | ---                 | ---                                          |
