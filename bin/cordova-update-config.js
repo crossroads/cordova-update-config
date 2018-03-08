@@ -22,6 +22,10 @@ const optionDefinitions = [
   {
     name: 'appid', description: 'The application id to update config.xml',
     alias: 'i', type: String
+  },
+  {
+    name: 'root', description: 'The root directory that contains the config.xml',
+    alias: 'r', type: String
   }
 ];
 
@@ -41,23 +45,22 @@ var cli = commandLineArgs(optionDefinitions);
 var args = cli.parse();
 
 if (args.help || Object.keys(args).length == 0) {
-	console.log(cli.getUsage(options));
-	return;
+  console.log(cli.getUsage(options));
+  return;
 }
 
-var ConfigParser    = require('cordova-common').ConfigParser;
-var CordovaError    = require('cordova-common').CordovaError;
-var fs              = require('fs');
-var path            = require('path');
+var ConfigParser = require('cordova-common').ConfigParser;
+var CordovaError = require('cordova-common').CordovaError;
+var fs = require('fs');
+var path = require('path');
 
-if (args.version)
-{
+if (args.version) {
   var pkg = require('../package.json');
   console.log('cordova-update-config ' + pkg.version);
   return;
 }
 
-var projectRoot = require('../lib/util').cordovaProjectRoot();
+var projectRoot = args.root || require('../lib/util').cordovaProjectRoot();
 if (!projectRoot) {
   throw new CordovaError('Current working directory is not a Cordova-based project.');
 }
