@@ -26,3 +26,4 @@
 | -n    | --appname string    | The application name to update config.xml    |
 | -a    | --appversion string | The application version to update config.xml |
 | -i    | --appid string      | The application id to update config.xml      |
+| -r    | --root              | Absolute path to folder containing config.xml (optional) |
