@@ -1,6 +1,6 @@
 {
   "name": "cordova-update-config",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A command line tool to update cordova's config.xml, useful in continuous integration build environments.",
   "bin": {
     "cordova-update-config": "bin/cordova-update-config.js"
