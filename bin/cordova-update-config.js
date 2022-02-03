@@ -1,83 +1,117 @@
 #! /usr/bin/env node
 
-var commandLineArgs = require('command-line-args');
+const commandLineArgs = require("command-line-args");
+const commandLineUsage = require("command-line-usage");
+const ConfigParser = require("cordova-common").ConfigParser;
+const CordovaError = require("cordova-common").CordovaError;
+const path = require("path");
 
 const optionDefinitions = [
   {
-    name: 'help', description: 'Display this usage guide.',
-    alias: 'h', type: Boolean
+    name: "help",
+    description: "Display this usage guide.",
+    alias: "h",
+    type: Boolean,
   },
   {
-    name: 'version', description: 'Display the version of this command',
-    alias: 'v', type: Boolean
+    name: "version",
+    description: "Display the version of this command",
+    alias: "v",
+    type: Boolean,
   },
   {
-    name: 'appname', description: 'The application name to update config.xml',
-    alias: 'n', type: String
+    name: "appname",
+    description: "The application name to update config.xml",
+    alias: "n",
+    type: String,
   },
   {
-    name: 'appversion', description: 'The application version to update config.xml',
-    alias: 'a', type: String
+    name: "appversion",
+    description: "The application version to update config.xml",
+    alias: "a",
+    type: String,
   },
   {
-    name: 'appid', description: 'The application id to update config.xml',
-    alias: 'i', type: String
+    name: "appid",
+    description: "The application id to update config.xml",
+    alias: "i",
+    type: String,
   },
   {
-    name: 'root', description: 'The root directory that contains the config.xml',
-    alias: 'r', type: String
-  }
+    name: "root",
+    description: "The root directory that contains the config.xml",
+    alias: "r",
+    type: String,
+  },
+  {
+    name: "file",
+    description:
+      "The path of the cordova config.xml. Cannot be used in combination with --root (-r)",
+    alias: "f",
+    type: String,
+  },
 ];
 
-const options = {
-  title: 'cordova-update-config',
-  description: "A command line tool to update cordova's config.xml, useful in continuous integration build environments.",
-  synopsis: [
-    '$ cordova-update-config --appname org.company.app --appversion 5.3.223 ...',
-    '$ cordova-update-config --help'
-  ],
-  footer: [
-    ''
-  ]
-};
+function main(callArguments) {
+  const continueExecution = handleMetaOptions(callArguments);
+  if (!continueExecution) return;
 
-var cli = commandLineArgs(optionDefinitions);
-var args = cli.parse();
+  const configPath = getConfigPath(
+    callArguments.file,
+    callArguments.projectRoot
+  );
+  const config = new ConfigParser(configPath);
 
-if (args.help || Object.keys(args).length == 0) {
-  console.log(cli.getUsage(options));
-  return;
+  if (callArguments.appid) {
+    config.setPackageName(callArguments.appid);
+  }
+
+  if (callArguments.appname) {
+    config.setName(callArguments.appname);
+  }
+
+  if (callArguments.appversion) {
+    config.setVersion(callArguments.appversion);
+  }
+
+  config.write();
 }
 
-var ConfigParser = require('cordova-common').ConfigParser;
-var CordovaError = require('cordova-common').CordovaError;
-var fs = require('fs');
-var path = require('path');
+function handleMetaOptions(callArguments) {
+  if (callArguments.help || Object.keys(callArguments).length == 0) {
+    console.log(
+      commandLineUsage([
+        {
+          header: "Options",
+          optionList: optionDefinitions,
+        },
+      ])
+    );
+    return false;
+  }
 
-if (args.version) {
-  var pkg = require('../package.json');
-  console.log('cordova-update-config ' + pkg.version);
-  return;
+  if (callArguments.version) {
+    const pkg = require("../package.json");
+    console.log("cordova-update-config " + pkg.version);
+    return false;
+  }
+
+  return true;
 }
 
-var projectRoot = args.root || require('../lib/util').cordovaProjectRoot();
-if (!projectRoot) {
-  throw new CordovaError('Current working directory is not a Cordova-based project.');
+function getConfigPath(fileOption, projectRootOption) {
+  if (fileOption) {
+    return fileOption;
+  }
+  const projectRoot =
+    projectRootOption || require("../lib/util").cordovaProjectRoot();
+  if (!projectRoot) {
+    throw new CordovaError(
+      "Current working directory is not a Cordova-based project."
+    );
+  }
+  return path.join(projectRoot, "config.xml");
 }
 
-var configPath = path.join(projectRoot, 'config.xml');
-var config = new ConfigParser(configPath);
-
-if (args.appid) {
-  config.setPackageName(args.appid);
-}
-
-if (args.appname) {
-  config.setName(args.appname);
-}
-
-if (args.appversion) {
-  config.setVersion(args.appversion);
-}
-
-config.write();
+const arguments = commandLineArgs(optionDefinitions);
+main(arguments);

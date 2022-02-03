@@ -19,6 +19,7 @@
   "homepage": "https://github.com/lukaspanni/cordova-update-config#readme",
   "dependencies": {
     "command-line-args": "^5.2.1",
+    "command-line-usage": "^6.1.1",
     "cordova-common": "^4.0.2"
   }
 }
