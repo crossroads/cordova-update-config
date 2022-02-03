@@ -1,25 +1,32 @@
 {
   "name": "cordova-update-config-enhanced",
-  "version": "1.0.0",
   "description": "A command line tool to update cordova's config.xml, useful in continuous integration build environments.",
-  "bin": {
-    "cordova-update-config-enhanced": "bin/cordova-update-config.js"
+  "version": "1.0.0",
+  "author": "Crossroads | Lukas Panni",
+  "homepage": "https://github.com/lukaspanni/cordova-update-config#readme",
+  "bugs": {
+    "url": "https://github.com/lukaspanni/cordova-update-config"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lukaspanni/cordova-update-config.git"
   },
   "keywords": [
-    "cordova"
+    "cordova",
+    "ci",
+    "version",
+    "workflow",
+    "automation"
   ],
-  "author": "Crossroads | Lukas Panni",
-  "bugs": {
-    "url": "https://github.com/lukaspanni/cordova-update-config"
+  "scripts": {
+    "postversion": "git push --tags && npm publish"
   },
-  "homepage": "https://github.com/lukaspanni/cordova-update-config#readme",
   "dependencies": {
     "command-line-args": "^5.2.1",
     "command-line-usage": "^6.1.1",
     "cordova-common": "^4.0.2"
+  },
+  "bin": {
+    "cordova-update-config-enhanced": "bin/cordova-update-config.js"
   }
 }
