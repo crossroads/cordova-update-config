@@ -1,11 +1,10 @@
 #! /usr/bin/env node
-
-const commandLineArgs = require("command-line-args");
-const commandLineUsage = require("command-line-usage");
+import path from "path";
+import fs from "fs";
+import commandLineArgs from "command-line-args";
+import commandLineUsage from "command-line-usage";
 const ConfigParser = require("cordova-common").ConfigParser;
 const CordovaError = require("cordova-common").CordovaError;
-const path = require("path");
-const fs = require("fs");
 
 const optionDefinitions = [
   {
@@ -59,7 +58,7 @@ const optionDefinitions = [
   },
 ];
 
-function main(callArguments) {
+function main(callArguments: any) {
   const continueExecution = handleMetaOptions(callArguments);
   if (!continueExecution) return;
 
@@ -97,7 +96,7 @@ function main(callArguments) {
   config.write();
 }
 
-function handleMetaOptions(callArguments) {
+function handleMetaOptions(callArguments: any) {
   if (callArguments.help || Object.keys(callArguments).length == 0) {
     console.log(
       commandLineUsage([
@@ -119,7 +118,7 @@ function handleMetaOptions(callArguments) {
   return true;
 }
 
-function getConfigPath(fileOption, projectRootOption) {
+function getConfigPath(fileOption: any, projectRootOption: any) {
   if (fileOption) {
     return fileOption;
   }
@@ -139,5 +138,5 @@ function getCordovaProjectRoot() {
   } else return undefined;
 }
 
-const arguments = commandLineArgs(optionDefinitions);
-main(arguments);
+const cliArgs = commandLineArgs(optionDefinitions);
+main(cliArgs);
