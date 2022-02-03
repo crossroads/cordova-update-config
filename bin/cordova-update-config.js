@@ -5,6 +5,7 @@ const commandLineUsage = require("command-line-usage");
 const ConfigParser = require("cordova-common").ConfigParser;
 const CordovaError = require("cordova-common").CordovaError;
 const path = require("path");
+const fs = require("fs");
 
 const optionDefinitions = [
   {
@@ -122,14 +123,20 @@ function getConfigPath(fileOption, projectRootOption) {
   if (fileOption) {
     return fileOption;
   }
-  const projectRoot =
-    projectRootOption || require("../lib/util").cordovaProjectRoot();
+  const projectRoot = projectRootOption || getCordovaProjectRoot();
   if (!projectRoot) {
     throw new CordovaError(
       "Current working directory is not a Cordova-based project."
     );
   }
   return path.join(projectRoot, "config.xml");
+}
+
+function getCordovaProjectRoot() {
+  const projectDir = process.cwd();
+  if (fs.existsSync(path.join(projectDir, "config.xml"))) {
+    return projectDir;
+  } else return undefined;
 }
 
 const arguments = commandLineArgs(optionDefinitions);
