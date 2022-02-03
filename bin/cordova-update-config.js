@@ -50,6 +50,12 @@ const optionDefinitions = [
     alias: "f",
     type: String,
   },
+  {
+    name: "androidversion",
+    description:
+      "The android version code to set in config.xml. If empty the current version-Code will be incremented",
+    type: String,
+  },
 ];
 
 function main(callArguments) {
@@ -72,6 +78,19 @@ function main(callArguments) {
 
   if (callArguments.appversion) {
     config.setVersion(callArguments.appversion);
+  }
+
+  if ("androidversion" in callArguments) {
+    const attributes = config.doc.getroot().attrib;
+    if (callArguments.androidversion) {
+      // set specific versionCode
+      attributes["android-versionCode"] = callArguments.androidversion;
+    } else {
+      // increment current versionCode if possible, else set versionCode to 1
+      let currentCode = Number(attributes["android-versionCode"]);
+      if (isNaN(currentCode)) currentCode = 0;
+      attributes["android-versionCode"] = currentCode + 1;
+    }
   }
 
   config.write();
