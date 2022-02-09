@@ -58,33 +58,33 @@ const optionDefinitions = [
   },
 ];
 
-function main(callArguments: any) {
+const main = (callArguments: commandLineArgs.CommandLineOptions): void => {
   const continueExecution = handleMetaOptions(callArguments);
   if (!continueExecution) return;
 
   const configPath = getConfigPath(
-    callArguments.file,
-    callArguments.projectRoot
+    callArguments["file"],
+    callArguments["projectRoot"]
   );
   const config = new ConfigParser(configPath);
 
-  if (callArguments.appid) {
-    config.setPackageName(callArguments.appid);
+  if (callArguments["appid"]) {
+    config.setPackageName(callArguments["appid"]);
   }
 
-  if (callArguments.appname) {
-    config.setName(callArguments.appname);
+  if (callArguments["appname"]) {
+    config.setName(callArguments["appname"]);
   }
 
-  if (callArguments.appversion) {
-    config.setVersion(callArguments.appversion);
+  if (callArguments["appversion"]) {
+    config.setVersion(callArguments["appversion"]);
   }
 
   if ("androidversion" in callArguments) {
     const attributes = config.doc.getroot().attrib;
-    if (callArguments.androidversion) {
+    if (callArguments["androidversion"]) {
       // set specific versionCode
-      attributes["android-versionCode"] = callArguments.androidversion;
+      attributes["android-versionCode"] = callArguments["androidversion"];
     } else {
       // increment current versionCode if possible, else set versionCode to 1
       let currentCode = Number(attributes["android-versionCode"]);
@@ -94,10 +94,12 @@ function main(callArguments: any) {
   }
 
   config.write();
-}
+};
 
-function handleMetaOptions(callArguments: any) {
-  if (callArguments.help || Object.keys(callArguments).length == 0) {
+const handleMetaOptions = (
+  callArguments: commandLineArgs.CommandLineOptions
+): boolean => {
+  if (callArguments["help"] || Object.keys(callArguments).length == 0) {
     console.log(
       commandLineUsage([
         {
@@ -109,16 +111,19 @@ function handleMetaOptions(callArguments: any) {
     return false;
   }
 
-  if (callArguments.version) {
+  if (callArguments["version"]) {
     const pkg = require("../package.json");
     console.log("cordova-update-config " + pkg.version);
     return false;
   }
 
   return true;
-}
+};
 
-function getConfigPath(fileOption: any, projectRootOption: any) {
+const getConfigPath = (
+  fileOption?: string,
+  projectRootOption?: string
+): string => {
   if (fileOption) {
     return fileOption;
   }
@@ -129,14 +134,14 @@ function getConfigPath(fileOption: any, projectRootOption: any) {
     );
   }
   return path.join(projectRoot, "config.xml");
-}
+};
 
-function getCordovaProjectRoot() {
+const getCordovaProjectRoot = (): string | undefined => {
   const projectDir = process.cwd();
   if (fs.existsSync(path.join(projectDir, "config.xml"))) {
     return projectDir;
   } else return undefined;
-}
+};
 
 const cliArgs = commandLineArgs(optionDefinitions);
 main(cliArgs);
